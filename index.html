@@ -44,21 +44,6 @@
             background-clip: text;
             color: transparent; /* Fallback for browsers that don't support text-fill-color */
         }
-
-        /* --- Custom Modal --- */
-        .modal {
-            transition: opacity 0.25s ease;
-        }
-        .modal-content {
-            transition: transform 0.25s ease;
-        }
-        
-        /* Custom modal for confirm */
-        .confirm-modal-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-        }
         
         /* Stop webkit from adding its own arrow */
         summary::-webkit-details-marker {
@@ -129,34 +114,6 @@
 </head>
 <body class="bg-gray-900 text-gray-200 antialiased pt-8 pb-24">
 
-    <!-- Custom Modal (for save prompts and alerts) -->
-    <div id="alertModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75 transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none no-print">
-        <div class="modal-content bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300 ease-in-out">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="alertModalTitle" class="text-xl font-bold text-white">Notice</h3>
-                <button id="closeAlertModalButton" class="text-gray-400 hover:text-white">&times;</button>
-            </div>
-            <p id="alertModalMessage" class="text-gray-300 mb-6">This is a modal message.</p>
-            <button id="alertModalOkButton" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded-lg transition">OK</button>
-        </div>
-    </div>
-    
-    <!-- Custom Confirm Modal (for delete) -->
-    <div id="confirmModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75 transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none no-print">
-        <div class="modal-content bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300 ease-in-out">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="confirmModalTitle" class="text-xl font-bold text-yellow-400">Confirm Action</h3>
-                <button id="closeConfirmModalButton" class="text-gray-400 hover:text-white">&times;</button>
-            </div>
-            <p id="confirmModalMessage" class="text-gray-300 mb-6">Are you sure?</p>
-            <div class="confirm-modal-buttons">
-                 <button id="confirmModalCancelButton" class="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition">Cancel</button>
-                 <button id="confirmModalOkButton" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-lg transition">Yes, Delete</button>
-            </div>
-        </div>
-    </div>
-
-
     <div class="max-w-2xl mx-auto px-4">
         <!-- Header (no-print hides it when printing) -->
         <header class="text-center mb-6 no-print">
@@ -164,46 +121,7 @@
             <h1 class="text-4xl font-extrabold gradient-text tracking-tight drop-shadow-lg">Hydroseeding Calculator</h1>
         </header>
 
-        <!-- NEW: Project Controls -->
-        <details class="group bg-gray-800 rounded-xl shadow-lg print-card mb-4 no-print overflow-hidden">
-            <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-semibold p-4 text-lg">
-                <span>Project Controls</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-            </summary>
-            
-            <div class="px-4 pb-4 pt-2 border-t border-gray-700">
-                <div class="space-y-3">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="text" id="employeeNameInput" placeholder="Enter Employee Name" class="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
-                        <button id="setUserButton" class="w-full p-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg shadow transition disabled:opacity-50">
-                            Load / Set User
-                        </button>
-                    </div>
-
-                    <div class="text-center text-xs text-gray-400 pt-2">
-                        Current Profile: <span id="currentProfileSpan" class="font-bold text-emerald-400">None</span>
-                    </div>
-
-                    <div class="pt-3 border-t border-gray-700 space-y-3">
-                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <select id="loadProjectDropdown" class="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" disabled>
-                                <option value="">Load Project...</option>
-                            </select>
-                            <button id="saveProjectButton" class="w-full p-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg shadow transition disabled:opacity-50" disabled>
-                                Save Current Project
-                            </button>
-                        </div>
-                        <button id="deleteProjectButton" class="w-full p-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg shadow transition disabled:opacity-50" disabled>
-                            Delete Selected Project
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-        </details>
-
+        <!-- Project Controls REMOVED -->
 
         <main class="space-y-4"> 
             <!-- 1. Project Specs -->
@@ -459,64 +377,16 @@
         </main>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            signInAnonymously, 
-            signInWithCustomToken,
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            collection,
-            onSnapshot,
-            deleteDoc,
-            setLogLevel
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+    <!-- Firebase SDKs REMOVED -->
+    
+    <script>
         // --- GLOBAL CONFIG & STATE ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        // Firebase instances
-        let app, db, auth;
-        let currentUserId = null; // The authenticated user's UID
-        let currentProfileName = null; // The employee name (e.g., "dave")
-        let savedProjects = new Map(); // Cache for loaded projects
-        let unsubscribeFromProjects = null; // To stop the listener
-
-        // DOM Elements (inputs, outputs, controls)
+        // All Firebase logic removed
         let inputs = {};
         let outputs = {};
         const controls = {
-            employeeNameInput: document.getElementById('employeeNameInput'),
-            setUserButton: document.getElementById('setUserButton'),
-            currentProfileSpan: document.getElementById('currentProfileSpan'),
-            loadProjectDropdown: document.getElementById('loadProjectDropdown'),
-            saveProjectButton: document.getElementById('saveProjectButton'),
-            deleteProjectButton: document.getElementById('deleteProjectButton'),
             resetButton: document.getElementById('resetButton'),
-            notesIndicator: document.getElementById('notesIndicator'), // Star indicator
-            
-            // Alert Modal
-            alertModal: document.getElementById('alertModal'),
-            alertModalTitle: document.getElementById('alertModalTitle'),
-            alertModalMessage: document.getElementById('alertModalMessage'),
-            alertModalOkButton: document.getElementById('alertModalOkButton'),
-            closeAlertModalButton: document.getElementById('closeAlertModalButton'),
-            
-            // Confirm Modal
-            confirmModal: document.getElementById('confirmModal'),
-            confirmModalTitle: document.getElementById('confirmModalTitle'),
-            confirmModalMessage: document.getElementById('confirmModalMessage'),
-            confirmModalOkButton: document.getElementById('confirmModalOkButton'),
-            confirmModalCancelButton: document.getElementById('confirmModalCancelButton'),
-            closeConfirmModalButton: document.getElementById('closeConfirmModalButton')
+            notesIndicator: document.getElementById('notesIndicator') // Star indicator
         };
         
         // Constants
@@ -526,61 +396,6 @@
             HA_TO_ACRES: 2.47105,
             HA_TO_M2: 10000,
         };
-        
-        // A promise for the confirm modal
-        let confirmResolver = null;
-
-        // --- MODAL FUNCTIONS ---
-        function showAlert(title, message) {
-            controls.alertModalTitle.textContent = title;
-            controls.alertModalMessage.textContent = message;
-            controls.alertModal.classList.remove('opacity-0', 'pointer-events-none');
-            controls.alertModal.querySelector('.modal-content').classList.remove('scale-95');
-        }
-
-        function hideAlert() {
-            controls.alertModal.classList.add('opacity-0', 'pointer-events-none');
-            controls.alertModal.querySelector('.modal-content').classList.add('scale-95');
-        }
-        
-        function showConfirm(title, message, okText = "OK") {
-            controls.confirmModalTitle.textContent = title;
-            controls.confirmModalMessage.textContent = message;
-            controls.confirmModalOkButton.textContent = okText;
-            controls.confirmModal.classList.remove('opacity-0', 'pointer-events-none');
-            controls.confirmModal.querySelector('.modal-content').classList.remove('scale-95');
-            
-            return new Promise((resolve) => {
-                confirmResolver = resolve;
-            });
-        }
-
-        function hideConfirm() {
-            controls.confirmModal.classList.add('opacity-0', 'pointer-events-none');
-            controls.confirmModal.querySelector('.modal-content').classList.add('scale-95');
-            if (confirmResolver) {
-                confirmResolver(false); // Resolve as false if closed
-                confirmResolver = null;
-            }
-        }
-        
-        function setupModalListeners() {
-            // Alert Modal
-            controls.alertModalOkButton.addEventListener('click', hideAlert);
-            controls.closeAlertModalButton.addEventListener('click', hideAlert);
-            
-            // Confirm Modal
-            controls.closeConfirmModalButton.addEventListener('click', hideConfirm);
-            controls.confirmModalCancelButton.addEventListener('click', hideConfirm);
-            controls.confirmModalOkButton.addEventListener('click', () => {
-                if (confirmResolver) {
-                    confirmResolver(true); // Resolve as true on OK
-                    confirmResolver = null;
-                }
-                hideConfirm();
-            });
-        }
-
 
         // --- CALCULATION LOGIC ---
         function calculate() {
@@ -651,135 +466,11 @@
             inputs.seedBagWeight.value = 25;
             inputs.fertilizerBagWeight.value = 25;
             inputs.aquaGelBagWeight.value = 25;
-            controls.loadProjectDropdown.value = "";
             checkNotes(); // Update star indicator
             calculate();
         }
 
-        // --- FIRESTORE FUNCTIONS ---
-        
-        function setProfile() {
-            const employeeName = controls.employeeNameInput.value.trim().toLowerCase();
-            if (!employeeName) {
-                showAlert("Set User", "Please enter an employee name.");
-                return;
-            }
-            
-            currentProfileName = employeeName;
-            controls.currentProfileSpan.textContent = employeeName;
-            
-            // Enable controls
-            controls.saveProjectButton.disabled = false;
-            controls.loadProjectDropdown.disabled = false;
-            controls.deleteProjectButton.disabled = false;
-            
-            // Reset form and dropdown
-            resetForm();
-            
-            // Detach old listener if it exists
-            if (unsubscribeFromProjects) {
-                unsubscribeFromProjects();
-            }
-            
-            // Attach new listener
-            setupFirestoreListeners();
-        }
-
-        async function saveProject() {
-            const projectName = inputs.customerName.value.trim();
-            if (!projectName) {
-                showAlert("Save Error", "Please enter a Customer/Project name first.");
-                return;
-            }
-            if (!currentProfileName) {
-                 showAlert("Save Error", "Please set an employee name first.");
-                return;
-            }
-
-            controls.saveProjectButton.disabled = true;
-            controls.saveProjectButton.textContent = "Saving...";
-
-            const projectData = {};
-            for (const key in inputs) {
-                projectData[key] = inputs[key].value;
-            }
-            
-            try {
-                // Use the correct public path
-                const docRef = doc(db, `artifacts/${appId}/public/data/hydroseed-projects/${currentProfileName}/projects`, projectName);
-                await setDoc(docRef, projectData);
-                
-                controls.saveProjectButton.textContent = "Saved!";
-                setTimeout(() => {
-                    controls.saveProjectButton.textContent = "Save Current Project";
-                }, 2000);
-
-            } catch (error) {
-                console.error("Error saving project: ", error);
-                showAlert("Save Error", `Could not save the project: ${error.message}`);
-                controls.saveProjectButton.textContent = "Save Current Project";
-            } finally {
-                controls.saveProjectButton.disabled = false;
-            }
-        }
-
-        function loadProject(projectName) {
-            const projectData = savedProjects.get(projectName);
-            if (!projectData) return;
-
-            for (const key in projectData) {
-                if (inputs[key]) {
-                    inputs[key].value = projectData[key];
-                }
-            }
-            // Ensure notes are loaded, even if they are empty
-            inputs.projectNotes.value = projectData.projectNotes || '';
-            
-            inputs.customerName.value = projectName;
-            checkNotes(); // Update star indicator
-            calculate();
-        }
-        
-        async function deleteProject() {
-            const projectName = controls.loadProjectDropdown.value;
-            if (!projectName) {
-                showAlert("Delete Error", "Please select a project from the dropdown to delete.");
-                return;
-            }
-            if (!currentProfileName) {
-                showAlert("Delete Error", "No user profile is set.");
-                return;
-            }
-            
-            const confirmed = await showConfirm(
-                "Delete Project", 
-                `Are you sure you want to delete "${projectName}"? This cannot be undone.`,
-                "Yes, Delete"
-            );
-            
-            if (!confirmed) {
-                return;
-            }
-
-            controls.deleteProjectButton.disabled = true;
-            controls.deleteProjectButton.textContent = "Deleting...";
-
-            try {
-                // Use the correct public path
-                const docRef = doc(db, `artifacts/${appId}/public/data/hydroseed-projects/${currentProfileName}/projects`, projectName);
-                await deleteDoc(docRef);
-                showAlert("Success", `Project "${projectName}" has been deleted.`);
-                resetForm(); // Clear the form after deletion
-            } catch (error) {
-                console.error("Error deleting project:", error);
-                showAlert("Delete Error", `Could not delete project: ${error.message}`);
-            } finally {
-                controls.deleteProjectButton.disabled = false;
-                controls.deleteProjectButton.textContent = "Delete Selected Project";
-            }
-        }
-        
-        // --- NEW: NOTES INDICATOR ---
+        // --- NOTES INDICATOR ---
         function checkNotes() {
             if (inputs.projectNotes.value.trim().length > 0) {
                 controls.notesIndicator.classList.remove('hidden');
@@ -848,115 +539,16 @@
             });
 
             // 3. Attach new control listeners
-            controls.setUserButton.addEventListener('click', setProfile);
-            controls.saveProjectButton.addEventListener('click', saveProject);
-            controls.deleteProjectButton.addEventListener('click', deleteProject);
             controls.resetButton.addEventListener('click', resetForm);
             
-            // 4. Setup modal listeners
-            setupModalListeners();
-
-            // 5. Run initial calculation & notes check
+            // 4. Run initial calculation & notes check
             calculate();
             checkNotes();
         }
 
-        function setupFirestoreListeners() {
-            if (!db || !currentUserId || !currentProfileName) return;
-
-            // Use the correct public path
-            const projectsCollection = collection(db, `artifacts/${appId}/public/data/hydroseed-projects/${currentProfileName}/projects`);
-            
-            unsubscribeFromProjects = onSnapshot(projectsCollection, (snapshot) => {
-                savedProjects.clear();
-                controls.loadProjectDropdown.innerHTML = '<option value="">Select a project to load...</option>';
-                
-                snapshot.forEach((doc) => {
-                    savedProjects.set(doc.id, doc.data());
-                    const option = document.createElement('option');
-                    option.value = doc.id;
-                    option.textContent = doc.id;
-                    controls.loadProjectDropdown.appendChild(option);
-                });
-
-                if(snapshot.empty) {
-                     controls.loadProjectDropdown.innerHTML = '<option value="">No projects saved</option>';
-                }
-            }, (error) => {
-                console.error("Error listening to projects: ", error);
-                showAlert("Database Error", `Could not load projects: ${error.message}`);
-                controls.loadProjectDropdown.innerHTML = '<option value="">Error loading</option>';
-            });
-
-            // Add listener for the dropdown
-            controls.loadProjectDropdown.addEventListener('input', (e) => {
-                if (e.target.value) {
-                    loadProject(e.target.value);
-                }
-            });
-        }
-
         // --- MAIN ENTRY POINT ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Initialize app logic (DOM mapping, basic listeners) immediately
-            // This ensures the page is interactive even before Firebase loads
+        document.addEventListener('DOMContentLoaded', () => {
             initializeAppLogic();
-            
-            // Check for Firebase config
-            if (!firebaseConfig) {
-                console.error("Firebase config is missing.");
-                showAlert("Configuration Error", "The app is not configured correctly. Save/Load features are disabled.");
-                // Disable all Firebase-related controls
-                controls.setUserButton.disabled = true;
-                controls.employeeNameInput.placeholder = "Save/Load disabled";
-                controls.employeeNameInput.disabled = true;
-                return;
-            }
-
-            try {
-                // Initialize Firebase
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                setLogLevel('error'); // Only log errors
-
-                // Listen for auth state changes
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        // User is signed in
-                        currentUserId = user.uid;
-                        console.log("User signed in with UID:", currentUserId);
-                        // Now that user is auth'd, enable the "Set User" button
-                        controls.setUserButton.disabled = false;
-
-                    } else {
-                        // User is signed out, attempt to sign in
-                        console.log("No user, attempting sign-in...");
-                        controls.setUserButton.disabled = true;
-                        
-                        try {
-                            if (initialAuthToken) {
-                                // Use the provided token from the environment
-                                await signInWithCustomToken(auth, initialAuthToken);
-                            } else {
-                                // Fallback for local development/testing
-                                await signInAnonymously(auth);
-
-                            }
-                        } catch (error) {
-                            console.error("Sign-in error:", error);
-                            showAlert("Authentication Error", "Could not connect to the database. Save/Load is disabled.");
-                        }
-                    }
-                });
-
-            } catch (error) {
-                console.error("Firebase initialization failed:", error);
-                showAlert("App Error", `Failed to load essential services: ${error.message}. Save/Load is disabled.`);
-                controls.setUserButton.disabled = true;
-                controls.employeeNameInput.placeholder = "Save/Load disabled";
-                controls.employeeNameInput.disabled = true;
-            }
         });
 
     </script>
