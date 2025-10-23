@@ -57,6 +57,7 @@
                 background-color: #ffffff;
                 color: #000000;
                 font-family: Arial, sans-serif;
+                font-size: 10pt; /* Compact base font */
             }
             main {
                 max-width: none;
@@ -70,26 +71,40 @@
                 background-color: #ffffff;
                 border: 1px solid #cccccc;
                 box-shadow: none;
-                padding: 1rem;
-                margin-bottom: 1rem;
-                /* Prevents cards from splitting across pages */
+                padding: 0.5rem; /* Compact padding */
+                margin-bottom: 0.5rem; /* Compact margin */
                 page-break-inside: avoid;
             }
             .output-field {
                 background-color: #eeeeee;
                 color: #000000;
                 border: 1px solid #dddddd;
+                padding: 0.25rem 0.5rem; /* Compact output */
+                font-size: 10pt;
             }
-            h1, h2, h3 {
-                color: #000000 !important;
+            h1 {
+                font-size: 18pt !important;
+                margin-bottom: 0.5rem;
+            }
+            h2 {
+                font-size: 14pt !important;
+                margin-bottom: 0.5rem;
+            }
+            h3 {
+                font-size: 12pt !important;
+                margin-bottom: 0.25rem;
             }
             /* Style inputs for printing */
             input[type=number], input[type=text], textarea {
                 background-color: #f3f4f6; /* light gray */
                 border: 1px solid #cccccc !important;
                 color: #000000;
-                padding: 0.5rem;
-                font-size: 1rem;
+                padding: 0.25rem; /* Compact inputs */
+                font-size: 10pt;
+            }
+            label, .text-gray-400, .text-gray-300 {
+                font-size: 9pt;
+                color: #000 !important;
             }
             /* Ensure gradient text is black when printed */
             .gradient-text {
@@ -98,16 +113,59 @@
                 background-image: none;
             }
             /* Show notes in print */
-            details[open] summary {
-                display: none;
+            details {
+                padding-top: 0.5rem;
+                margin-top: 0.5rem;
+            }
+            details summary {
+                font-size: 11pt;
+                display: none; /* Hide summary in print */
             }
             details[open] .print-notes {
                 display: block !important;
                 border: none;
                 padding: 0;
+                margin: 0;
             }
             textarea {
-                min-height: 100px;
+                min-height: 80px; /* Shorter notes */
+            }
+            
+            /* --- Compact Spacing --- */
+            .grid {
+                gap: 0.25rem !important;
+            }
+            .space-y-4, .space-y-3 {
+                gap: 0.5rem;
+            }
+            .space-y-2 {
+                gap: 0.25rem;
+            }
+            .p-5 { padding: 0.5rem !important; }
+            .p-3 { padding: 0.25rem !important; }
+            .p-2 { padding: 0.25rem !important; }
+            .mb-4 { margin-bottom: 0.5rem !important; }
+            .mb-3 { margin-bottom: 0.25rem !important; }
+            .mb-2 { margin-bottom: 0.25rem !important; }
+            .mt-4 { margin-top: 0.5rem !important; }
+            .mt-6 { margin-top: 0.75rem !important; }
+
+            .text-xl { font-size: 12pt !important; }
+            .text-2xl { font-size: 14pt !important; }
+            .text-sm { font-size: 9pt !important; }
+            .text-xs { font-size: 8pt !important; }
+            .font-semibold { font-weight: 600; }
+            .font-bold { font-weight: 700; }
+            
+            /* Specific tweaks */
+            .grid-cols-3.gap-4.items-center {
+                gap: 0.5rem !important;
+            }
+            .grid-cols-5.items-center.gap-3 {
+                gap: 0.5rem !important;
+            }
+            .grid-cols-3.items-center.gap-3 {
+                gap: 0.5rem !important;
             }
         }
     </style>
@@ -165,7 +223,7 @@
                 <details class="group pt-4 mt-4 border-t border-gray-700">
                     <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium list-none">
                         <span>Material Bag Weight Settings</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180 no-print" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </summary>
@@ -187,7 +245,7 @@
                 <details class="group pt-4 mt-4 border-t border-gray-700">
                     <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium list-none">
                         <span>Show Optional Products</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180 no-print" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </summary>
@@ -229,7 +287,7 @@
                             <!-- NEW: Star indicator -->
                             <span id="notesIndicator" class="text-emerald-400 ml-2 hidden font-bold text-lg">*</span>
                         </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180 no-print" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </summary>
@@ -277,7 +335,7 @@
                         <!-- Product mix color changed -->
                         <span id="fertilizerPerLoad" class="font-bold text-emerald-400">0 kg</span>
                     </div>
-                    <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
+                    <div class="flex justify-between items-center bg-gray-700/5If p-3 rounded-lg">
                         <span class="font-medium">AquaGel</span>
                         <!-- Product mix color changed -->
                         <span id="aquaGelPerLoad" class="font-bold text-emerald-400">0 kg</span>
