@@ -35,25 +35,192 @@
             background-color: #1f2937; /* gray-800 */
             border: 1px solid #4b5563; /* gray-600 */
         }
+        
+        /* Custom gradient for the title */
+        .gradient-text {
+            background-image: linear-gradient(to right, #84cc16, #22c55e); /* lime-500 to emerald-500 */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback for browsers that don't support text-fill-color */
+        }
+
+        /* --- Custom Modal --- */
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        .modal-content {
+            transition: transform 0.25s ease;
+        }
+        
+        /* Custom modal for confirm */
+        .confirm-modal-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        
+        /* Stop webkit from adding its own arrow */
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+
+        /* --- Print Styles --- */
+        @media print {
+            body {
+                background-color: #ffffff;
+                color: #000000;
+                font-family: Arial, sans-serif;
+            }
+            main {
+                max-width: none;
+                padding: 0;
+                margin: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            .print-card {
+                background-color: #ffffff;
+                border: 1px solid #cccccc;
+                box-shadow: none;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                /* Prevents cards from splitting across pages */
+                page-break-inside: avoid;
+            }
+            .output-field {
+                background-color: #eeeeee;
+                color: #000000;
+                border: 1px solid #dddddd;
+            }
+            h1, h2, h3 {
+                color: #000000 !important;
+            }
+            /* Style inputs for printing */
+            input[type=number], input[type=text], textarea {
+                background-color: #f3f4f6; /* light gray */
+                border: 1px solid #cccccc !important;
+                color: #000000;
+                padding: 0.5rem;
+                font-size: 1rem;
+            }
+            /* Ensure gradient text is black when printed */
+            .gradient-text {
+                -webkit-text-fill-color: #000000;
+                color: #000000;
+                background-image: none;
+            }
+            /* Show notes in print */
+            details[open] summary {
+                display: none;
+            }
+            details[open] .print-notes {
+                display: block !important;
+                border: none;
+                padding: 0;
+            }
+            textarea {
+                min-height: 100px;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 antialiased pt-8 pb-24">
 
+    <!-- Custom Modal (for save prompts and alerts) -->
+    <div id="alertModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75 transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none no-print">
+        <div class="modal-content bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300 ease-in-out">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="alertModalTitle" class="text-xl font-bold text-white">Notice</h3>
+                <button id="closeAlertModalButton" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <p id="alertModalMessage" class="text-gray-300 mb-6">This is a modal message.</p>
+            <button id="alertModalOkButton" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded-lg transition">OK</button>
+        </div>
+    </div>
+    
+    <!-- Custom Confirm Modal (for delete) -->
+    <div id="confirmModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75 transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none no-print">
+        <div class="modal-content bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300 ease-in-out">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="confirmModalTitle" class="text-xl font-bold text-yellow-400">Confirm Action</h3>
+                <button id="closeConfirmModalButton" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <p id="confirmModalMessage" class="text-gray-300 mb-6">Are you sure?</p>
+            <div class="confirm-modal-buttons">
+                 <button id="confirmModalCancelButton" class="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition">Cancel</button>
+                 <button id="confirmModalOkButton" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-lg transition">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="max-w-2xl mx-auto px-4">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-white tracking-tight">Hydroseeding Calculator</h1>
-            <p class="text-gray-400 mt-1">Mobile-friendly version for field use.</p>
+        <!-- Header (no-print hides it when printing) -->
+        <header class="text-center mb-6 no-print">
+            <!-- Modified title with gradient and shadow -->
+            <h1 class="text-4xl font-extrabold gradient-text tracking-tight drop-shadow-lg">Hydroseeding Calculator</h1>
         </header>
 
-        <main class="space-y-6">
-            <!-- Specs/Totals Section -->
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg">
-                <h2 class="text-xl font-semibold mb-4 text-cyan-400">1. Project Specs</h2>
+        <!-- NEW: Project Controls -->
+        <details class="group bg-gray-800 rounded-xl shadow-lg print-card mb-4 no-print overflow-hidden">
+            <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-semibold p-4 text-lg">
+                <span>Project Controls</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </summary>
+            
+            <div class="px-4 pb-4 pt-2 border-t border-gray-700">
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="employeeNameInput" placeholder="Enter Employee Name" class="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                        <button id="setUserButton" class="w-full p-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg shadow transition disabled:opacity-50">
+                            Load / Set User
+                        </button>
+                    </div>
+
+                    <div class="text-center text-xs text-gray-400 pt-2">
+                        Current Profile: <span id="currentProfileSpan" class="font-bold text-emerald-400">None</span>
+                    </div>
+
+                    <div class="pt-3 border-t border-gray-700 space-y-3">
+                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <select id="loadProjectDropdown" class="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" disabled>
+                                <option value="">Load Project...</option>
+                            </select>
+                            <button id="saveProjectButton" class="w-full p-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg shadow transition disabled:opacity-50" disabled>
+                                Save Current Project
+                            </button>
+                        </div>
+                        <button id="deleteProjectButton" class="w-full p-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg shadow transition disabled:opacity-50" disabled>
+                            Delete Selected Project
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </details>
+
+
+        <main class="space-y-4"> 
+            <!-- 1. Project Specs -->
+            <div class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
+                <!-- Section header color changed -->
+                <h2 class="text-xl font-semibold mb-4 text-emerald-400">1. Project Specs</h2>
                 
-                <!-- Area Input -->
-                <div class="space-y-2 mb-6">
-                    <label for="area" class="block font-medium text-gray-300">Total Area (hectares)</label>
-                    <input type="number" id="area" value="0" placeholder="0" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+                <!-- COMPACT: Customer Name -->
+                <div class="grid grid-cols-3 items-center gap-3 mb-2"> 
+                    <label for="customerName" class="col-span-1 font-medium text-gray-300 text-sm">Customer</label> 
+                    <input type="text" id="customerName" placeholder="Enter name" class="col-span-2 w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                </div>
+
+                <!-- Area Input - Reverted size -->
+                <div class="grid grid-cols-3 items-center gap-3 mb-4"> 
+                    <label for="area" class="col-span-1 font-medium text-gray-300">Total Area (ha)</label> 
+                    <input type="number" id="area" value="0" placeholder="0" class="col-span-2 w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-base font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
                 </div>
 
                 <!-- Application Rates -->
@@ -61,53 +228,63 @@
                 <div class="space-y-4">
                     <div class="grid grid-cols-5 items-center gap-3">
                         <label for="mulchRate" class="col-span-2 font-medium">Mulch</label>
-                        <input type="number" id="mulchRate" value="0" placeholder="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                        <input type="number" id="mulchRate" value="0" placeholder="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
                         <span class="text-gray-400">kg/ha</span>
                     </div>
                     <div class="grid grid-cols-5 items-center gap-3">
                         <label for="seedRate" class="col-span-2 font-medium">Seed</label>
-                        <input type="number" id="seedRate" value="0" placeholder="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                        <input type="number" id="seedRate" value="0" placeholder="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
                         <span class="text-gray-400">kg/ha</span>
                     </div>
                     <div class="grid grid-cols-5 items-center gap-3">
                         <label for="fertilizerRate" class="col-span-2 font-medium">Fertilizer</label>
-                        <input type="number" id="fertilizerRate" value="0" placeholder="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                        <input type="number" id="fertilizerRate" value="0" placeholder="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
                         <span class="text-gray-400">kg/ha</span>
                     </div>
                 </div>
 
-                <!-- NEW: Collapsible Material Bag Weights -->
-                <details class="pt-4 mt-4 border-t border-gray-700">
-                    <summary class="cursor-pointer text-cyan-400 hover:text-cyan-300 font-medium">Material Bag Weight Settings</summary>
+                <!-- Collapsible Material Bag Weights -->
+                <details class="group pt-4 mt-4 border-t border-gray-700">
+                    <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium list-none">
+                        <span>Material Bag Weight Settings</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </summary>
                     <div class="space-y-4 mt-4 pt-4 border-t border-gray-600">
                          <div class="grid grid-cols-5 items-center gap-3">
                             <label for="seedBagWeight" class="col-span-2 font-medium">Seed Bag</label>
-                            <input type="number" id="seedBagWeight" value="25" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                            <input type="number" id="seedBagWeight" value="25" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
                             <span class="text-gray-400">kg</span>
                         </div>
                         <div class="grid grid-cols-5 items-center gap-3">
                             <label for="fertilizerBagWeight" class="col-span-2 font-medium">Fertilizer Bag</label>
-                            <input type="number" id="fertilizerBagWeight" value="25" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                            <input type="number" id="fertilizerBagWeight" value="25" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
                             <span class="text-gray-400">kg</span>
                         </div>
                     </div>
                 </details>
                 
                 <!-- Optional Inputs -->
-                <details class="pt-4 mt-4 border-t border-gray-700">
-                    <summary class="cursor-pointer text-cyan-400 hover:text-cyan-300 font-medium">Show Optional Products</summary>
+                <details class="group pt-4 mt-4 border-t border-gray-700">
+                    <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium list-none">
+                        <span>Show Optional Products</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </summary>
                     <div class="space-y-4 mt-4 pt-4 border-t border-gray-600">
                         
                         <!-- Group AquaGel inputs -->
                         <div class="bg-gray-900/50 p-3 rounded-lg">
                             <div class="grid grid-cols-5 items-center gap-3">
                                 <label for="aquaGelRate" class="col-span-2 font-medium">AquaGel Rate</label>
-                                <input type="number" id="aquaGelRate" value="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                                <input type="number" id="aquaGelRate" value="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
                                 <span class="text-gray-400">kg/ha</span>
                             </div>
                             <div class="grid grid-cols-5 items-center gap-3 mt-3">
-                                <label for="aquaGelBagWeight" class="col-span-2 font-medium">AquaGel Bag</D>
-                                <input type="number" id="aquaGelBagWeight" value="25" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                                <label for="aquaGelBagWeight" class="col-span-2 font-medium">AquaGel Bag</label>
+                                <input type="number" id="aquaGelBagWeight" value="25" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
                                 <span class="text-gray-400">kg</span>
                             </div>
                         </div>
@@ -115,21 +292,85 @@
                         <!-- Other optional products -->
                         <div class="grid grid-cols-5 items-center gap-3 mt-3">
                             <label for="jumpStartRate" class="col-span-2 font-medium">Jump Start</label>
-                            <input type="number" id="jumpStartRate" value="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                            <input type="number" id="jumpStartRate" value="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
                             <span class="text-gray-400">kg/ha</span>
                         </div>
                         <div class="grid grid-cols-5 items-center gap-3">
                             <label for="bsmRate" class="col-span-2 font-medium">BSM</label>
-                            <input type="number" id="bsmRate" value="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                            <input type="number" id="bsmRate" value="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
                             <span class="text-gray-400">m2</span>
                         </div>
                     </div>
                 </details>
+                
+                <!-- NEW: Project Notes -->
+                <details class="group pt-4 mt-4 border-t border-gray-700">
+                    <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium list-none">
+                        <span class="flex items-center">
+                            Project Notes
+                            <!-- NEW: Star indicator -->
+                            <span id="notesIndicator" class="text-emerald-400 ml-2 hidden font-bold text-lg">*</span>
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </summary>
+                    <div class="mt-4 pt-4 border-t border-gray-600 print-notes">
+                        <textarea id="projectNotes" rows="4" class="w-full p-2 rounded-md bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="Add any job-site notes, contact info, or instructions here..."></textarea>
+                    </div>
+                </details>
             </div>
             
-            <!-- Calculated Totals -->
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg">
-                 <h2 class="text-xl font-semibold mb-4 text-cyan-400">2. Calculated Totals</h2>
+            <!-- 2. Truck Load Mix (MOVED UP) -->
+            <div class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
+                <!-- Section header color changed -->
+                <h2 class="text-xl font-semibold mb-4 text-emerald-400">2. Truck Load Mix</h2>
+                
+                <!-- COMPACTED: Bales per Load -->
+                <div class="grid grid-cols-3 items-center gap-3 mb-4">
+                    <label for="balesPerLoad" class="col-span-1 font-medium text-gray-300">Bales / Load</label>
+                    <div class="col-span-2 flex items-center space-x-3">
+                        <input type="range" id="balesPerLoadSlider" min="1" max="50" value="30" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer no-print">
+                        <input type="number" id="balesPerLoad" value="30" class="w-20 p-2 text-center rounded-md bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"> 
+                    </div>
+                </div>
+
+                <!-- COMPACTED: Total Loads / Area per Load -->
+                <div class="grid grid-cols-2 gap-4 mt-4"> 
+                    <div class="text-center">
+                        <div class="text-sm text-gray-400">Total Loads</div>
+                        <div id="totalLoads" class="text-xl font-bold text-white">0</div> 
+                    </div>
+                     <div class="text-center">
+                        <div class="text-sm text-gray-400">Area per Load</div>
+                        <div id="areaPerLoad" class="text-xl font-bold text-white">0 m²</div> 
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold mt-6 mb-3 text-gray-200">Product Mix per Load</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
+                        <span class="font-medium">Seed</span>
+                        <!-- Product mix color changed -->
+                        <span id="seedPerLoad" class="font-bold text-emerald-400">0 kg</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
+                        <span class="font-medium">Fertilizer</span>
+                        <!-- Product mix color changed -->
+                        <span id="fertilizerPerLoad" class="font-bold text-emerald-400">0 kg</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
+                        <span class="font-medium">AquaGel</span>
+                        <!-- Product mix color changed -->
+                        <span id="aquaGelPerLoad" class="font-bold text-emerald-400">0 kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Calculated Totals (MOVED DOWN) -->
+            <div class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
+                 <!-- Section header color changed -->
+                 <h2 class="text-xl font-semibold mb-4 text-emerald-400">3. Calculated Totals</h2>
                  <div class="grid grid-cols-3 gap-x-4 gap-y-2 text-center text-sm font-medium text-gray-400 mb-3">
                      <span>Product</span>
                      <span>Total Needed</span>
@@ -159,49 +400,10 @@
                  </div>
             </div>
 
-            <!-- Truck Load Mix -->
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg">
-                <h2 class="text-xl font-semibold mb-4 text-cyan-400">3. Truck Load Mix</h2>
-                
-                <div class="space-y-2 mb-4">
-                    <label for="balesPerLoad" class="block font-medium text-gray-300">Mulch Bales per Load</label>
-                    <div class="flex items-center space-x-4">
-                        <input type="range" id="balesPerLoadSlider" min="1" max="50" value="30" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
-                        <input type="number" id="balesPerLoad" value="30" class="w-24 p-2 text-center rounded-md bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-1 focus:ring-cyan-500">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mt-6">
-                    <div class="text-center">
-                        <div class="text-sm text-gray-400">Total Loads</div>
-                        <div id="totalLoads" class="text-2xl font-bold text-white mt-1">0</div>
-                    </div>
-                     <div class="text-center">
-                        <div class="text-sm text-gray-400">Area per Load</div>
-                        <div id="areaPerLoad" class="text-2xl font-bold text-white mt-1">0 m²</div>
-                    </div>
-                </div>
-
-                <h3 class="text-lg font-semibold mt-6 mb-3 text-gray-200">Product Mix per Load</h3>
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
-                        <span class="font-medium">Seed</span>
-                        <span id="seedPerLoad" class="font-bold text-cyan-400">0 kg</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
-                        <span class="font-medium">Fertilizer</span>
-                        <span id="fertilizerPerLoad" class="font-bold text-cyan-400">0 kg</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-gray-700/5Examples/50 p-3 rounded-lg">
-                        <span class="font-medium">AquaGel</span>
-                        <span id="aquaGelPerLoad" class="font-bold text-cyan-400">0 kg</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Other Calculations -->
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg">
-                 <h2 class="text-xl font-semibold mb-4 text-cyan-400">4. Other Calculations</h2>
+            <!-- 4. Other Calculations -->
+            <div class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
+                 <!-- Section header color changed -->
+                 <h2 class="text-xl font-semibold mb-4 text-emerald-400">4. Other Calculations</h2>
                  <div class="grid grid-cols-2 gap-4 text-center">
                     <div>
                         <div class="text-sm text-gray-400">Mulch Stacks</div>
@@ -216,31 +418,381 @@
                  </div>
             </div>
             
-             <!-- Reference Table -->
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg">
-                 <h2 class="text-xl font-semibold mb-4 text-cyan-400">Reference</h2>
+             <!-- Reference Table (no-print hides it) -->
+             <div class="bg-gray-800 p-5 rounded-xl shadow-lg no-print">
+                 <!-- Section header color changed -->
+                 <h2 class="text-xl font-semibold mb-4 text-emerald-400">Reference</h2>
                  <div class="text-center">
                      <p class="font-medium mb-2 text-gray-300">Hydroseeder Bale Capacity</p>
                      <div class="inline-flex bg-gray-700/50 rounded-lg p-1 text-sm">
                          <div class="px-4 py-2">
-                            <span class="font-bold text-white">400 gal:</span>
+                            <span class="font-bold text-white">400:</span>
                             <span class="text-gray-300"> 34-35 bales</span>
                         </div>
                          <div class="border-l border-gray-600 px-4 py-2">
-                            <span class="font-bold text-white">300 gal:</span>
+                            <span class="font-bold text-white">300:</span>
                             <span class="text-gray-300"> 28-29 bales</span>
                         </div>
                      </div>
                  </div>
             </div>
 
+            <!-- Print Button (MOVED TO BOTTOM) -->
+            <div class="mt-8 flex justify-center gap-4 no-print"> 
+                <!-- NEW: Reset Button -->
+                <button id="resetButton" class="inline-flex items-center justify-center px-6 py-3 bg-gray-600 hover:bg-gray-500 text-white font-semibold rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m-15.357-2a8.001 8.001 0 0015.357 2m0 0H15" />
+                    </svg>
+                    Reset Form
+                </button>
+                
+                <!-- Print button color changed -->
+                <button id="print-button" onclick="window.print()" class="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
+                    </svg>
+                    Print / Save as PDF
+                </button>
+            </div>
+
         </main>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- ELEMENTS ---
-            const inputs = {
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInAnonymously, 
+            signInWithCustomToken,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            collection,
+            onSnapshot,
+            deleteDoc,
+            setLogLevel
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- GLOBAL CONFIG & STATE ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Firebase instances
+        let app, db, auth;
+        let currentUserId = null; // The authenticated user's UID
+        let currentProfileName = null; // The employee name (e.g., "dave")
+        let savedProjects = new Map(); // Cache for loaded projects
+        let unsubscribeFromProjects = null; // To stop the listener
+
+        // DOM Elements (inputs, outputs, controls)
+        let inputs = {};
+        let outputs = {};
+        const controls = {
+            employeeNameInput: document.getElementById('employeeNameInput'),
+            setUserButton: document.getElementById('setUserButton'),
+            currentProfileSpan: document.getElementById('currentProfileSpan'),
+            loadProjectDropdown: document.getElementById('loadProjectDropdown'),
+            saveProjectButton: document.getElementById('saveProjectButton'),
+            deleteProjectButton: document.getElementById('deleteProjectButton'),
+            resetButton: document.getElementById('resetButton'),
+            notesIndicator: document.getElementById('notesIndicator'), // Star indicator
+            
+            // Alert Modal
+            alertModal: document.getElementById('alertModal'),
+            alertModalTitle: document.getElementById('alertModalTitle'),
+            alertModalMessage: document.getElementById('alertModalMessage'),
+            alertModalOkButton: document.getElementById('alertModalOkButton'),
+            closeAlertModalButton: document.getElementById('closeAlertModalButton'),
+            
+            // Confirm Modal
+            confirmModal: document.getElementById('confirmModal'),
+            confirmModalTitle: document.getElementById('confirmModalTitle'),
+            confirmModalMessage: document.getElementById('confirmModalMessage'),
+            confirmModalOkButton: document.getElementById('confirmModalOkButton'),
+            confirmModalCancelButton: document.getElementById('confirmModalCancelButton'),
+            closeConfirmModalButton: document.getElementById('closeConfirmModalButton')
+        };
+        
+        // Constants
+        const CONSTANTS = {
+            KG_PER_MULCH_BALE: 22.7,
+            BALES_PER_MULCH_STACK: 40,
+            HA_TO_ACRES: 2.47105,
+            HA_TO_M2: 10000,
+        };
+        
+        // A promise for the confirm modal
+        let confirmResolver = null;
+
+        // --- MODAL FUNCTIONS ---
+        function showAlert(title, message) {
+            controls.alertModalTitle.textContent = title;
+            controls.alertModalMessage.textContent = message;
+            controls.alertModal.classList.remove('opacity-0', 'pointer-events-none');
+            controls.alertModal.querySelector('.modal-content').classList.remove('scale-95');
+        }
+
+        function hideAlert() {
+            controls.alertModal.classList.add('opacity-0', 'pointer-events-none');
+            controls.alertModal.querySelector('.modal-content').classList.add('scale-95');
+        }
+        
+        function showConfirm(title, message, okText = "OK") {
+            controls.confirmModalTitle.textContent = title;
+            controls.confirmModalMessage.textContent = message;
+            controls.confirmModalOkButton.textContent = okText;
+            controls.confirmModal.classList.remove('opacity-0', 'pointer-events-none');
+            controls.confirmModal.querySelector('.modal-content').classList.remove('scale-95');
+            
+            return new Promise((resolve) => {
+                confirmResolver = resolve;
+            });
+        }
+
+        function hideConfirm() {
+            controls.confirmModal.classList.add('opacity-0', 'pointer-events-none');
+            controls.confirmModal.querySelector('.modal-content').classList.add('scale-95');
+            if (confirmResolver) {
+                confirmResolver(false); // Resolve as false if closed
+                confirmResolver = null;
+            }
+        }
+        
+        function setupModalListeners() {
+            // Alert Modal
+            controls.alertModalOkButton.addEventListener('click', hideAlert);
+            controls.closeAlertModalButton.addEventListener('click', hideAlert);
+            
+            // Confirm Modal
+            controls.closeConfirmModalButton.addEventListener('click', hideConfirm);
+            controls.confirmModalCancelButton.addEventListener('click', hideConfirm);
+            controls.confirmModalOkButton.addEventListener('click', () => {
+                if (confirmResolver) {
+                    confirmResolver(true); // Resolve as true on OK
+                    confirmResolver = null;
+                }
+                hideConfirm();
+            });
+        }
+
+
+        // --- CALCULATION LOGIC ---
+        function calculate() {
+            // This function is self-contained and safe, no changes needed
+            const area = parseFloat(inputs.area.value) || 0;
+            const mulchRate = parseFloat(inputs.mulchRate.value) || 0;
+            const seedRate = parseFloat(inputs.seedRate.value) || 0;
+            const fertilizerRate = parseFloat(inputs.fertilizerRate.value) || 0;
+            const aquaGelRate = parseFloat(inputs.aquaGelRate.value) || 0;
+            const balesPerLoad = parseInt(inputs.balesPerLoad.value) || 0;
+            const seedBagWeight = parseFloat(inputs.seedBagWeight.value) || 1;
+            const fertilizerBagWeight = parseFloat(inputs.fertilizerBagWeight.value) || 1;
+            const aquaGelBagWeight = parseFloat(inputs.aquaGelBagWeight.value) || 1;
+            const totalKg = {
+                mulch: area * mulchRate,
+                seed: area * seedRate,
+                fertilizer: area * fertilizerRate,
+                aquaGel: area * aquaGelRate,
+            };
+            const totalBalesBags = {
+                mulch: totalKg.mulch / CONSTANTS.KG_PER_MULCH_BALE,
+                seed: totalKg.seed / seedBagWeight,
+                fertilizer: totalKg.fertilizer / fertilizerBagWeight,
+                aquaGel: totalKg.aquaGel / aquaGelBagWeight,
+            };
+            const totalLoads = balesPerLoad > 0 ? totalBalesBags.mulch / balesPerLoad : 0;
+            const areaM2 = area * CONSTANTS.HA_TO_M2;
+            const areaPerLoad = totalLoads > 0 ? areaM2 / totalLoads : 0;
+            const perLoad = {
+                seed: totalLoads > 0 ? totalKg.seed / totalLoads : 0,
+                fertilizer: totalLoads > 0 ? totalKg.fertilizer / totalLoads : 0,
+                aquaGel: totalLoads > 0 ? totalKg.aquaGel / totalLoads : 0,
+            };
+            const mulchStacks = totalBalesBags.mulch / CONSTANTS.BALES_PER_MULCH_STACK;
+            const areaAcres = area * CONSTANTS.HA_TO_ACRES;
+            const formatKg = (val) => `${val.toFixed(1)} kg`;
+            const formatNum = (val, dec = 2) => val.toFixed(dec);
+            outputs.mulchNeeded.textContent = formatKg(totalKg.mulch);
+            outputs.mulchBales.textContent = formatNum(totalBalesBags.mulch, 2);
+            outputs.seedNeeded.textContent = formatKg(totalKg.seed);
+            outputs.seedBags.textContent = formatNum(totalBalesBags.seed, 2);
+            outputs.fertilizerNeeded.textContent = formatKg(totalKg.fertilizer);
+            outputs.fertilizerBags.textContent = formatNum(totalBalesBags.fertilizer, 2);
+            outputs.aquaGelNeeded.textContent = formatKg(totalKg.aquaGel);
+            outputs.aquaGelBags.textContent = formatNum(totalBalesBags.aquaGel, 2);
+            outputs.totalLoads.textContent = formatNum(totalLoads);
+            outputs.areaPerLoad.textContent = `${areaPerLoad.toFixed(0)} m²`;
+            outputs.seedPerLoad.textContent = formatKg(perLoad.seed);
+            outputs.fertilizerPerLoad.textContent = formatKg(perLoad.fertilizer);
+            outputs.aquaGelPerLoad.textContent = formatKg(perLoad.aquaGel);
+            outputs.mulchStacks.textContent = formatNum(mulchStacks);
+            outputs.areaAcres.textContent = formatNum(areaAcres, 3);
+        }
+
+        // --- RESET FUNCTION ---
+        function resetForm() {
+            inputs.customerName.value = '';
+            inputs.area.value = 0;
+            inputs.mulchRate.value = 0;
+            inputs.seedRate.value = 0;
+            inputs.fertilizerRate.value = 0;
+            inputs.aquaGelRate.value = 0;
+            inputs.jumpStartRate.value = 0;
+            inputs.bsmRate.value = 0;
+            inputs.projectNotes.value = ''; // Reset notes
+            inputs.balesPerLoad.value = 30;
+            inputs.balesPerLoadSlider.value = 30;
+            inputs.seedBagWeight.value = 25;
+            inputs.fertilizerBagWeight.value = 25;
+            inputs.aquaGelBagWeight.value = 25;
+            controls.loadProjectDropdown.value = "";
+            checkNotes(); // Update star indicator
+            calculate();
+        }
+
+        // --- FIRESTORE FUNCTIONS ---
+        
+        function setProfile() {
+            const employeeName = controls.employeeNameInput.value.trim().toLowerCase();
+            if (!employeeName) {
+                showAlert("Set User", "Please enter an employee name.");
+                return;
+            }
+            
+            currentProfileName = employeeName;
+            controls.currentProfileSpan.textContent = employeeName;
+            
+            // Enable controls
+            controls.saveProjectButton.disabled = false;
+            controls.loadProjectDropdown.disabled = false;
+            controls.deleteProjectButton.disabled = false;
+            
+            // Reset form and dropdown
+            resetForm();
+            
+            // Detach old listener if it exists
+            if (unsubscribeFromProjects) {
+                unsubscribeFromProjects();
+            }
+            
+            // Attach new listener
+            setupFirestoreListeners();
+        }
+
+        async function saveProject() {
+            const projectName = inputs.customerName.value.trim();
+            if (!projectName) {
+                showAlert("Save Error", "Please enter a Customer/Project name first.");
+                return;
+            }
+            if (!currentProfileName) {
+                 showAlert("Save Error", "Please set an employee name first.");
+                return;
+            }
+
+            controls.saveProjectButton.disabled = true;
+            controls.saveProjectButton.textContent = "Saving...";
+
+            const projectData = {};
+            for (const key in inputs) {
+                projectData[key] = inputs[key].value;
+            }
+            
+            try {
+                // Use the correct public path
+                const docRef = doc(db, `artifacts/${appId}/public/data/hydroseed-projects/${currentProfileName}/projects`, projectName);
+                await setDoc(docRef, projectData);
+                
+                controls.saveProjectButton.textContent = "Saved!";
+                setTimeout(() => {
+                    controls.saveProjectButton.textContent = "Save Current Project";
+                }, 2000);
+
+            } catch (error) {
+                console.error("Error saving project: ", error);
+                showAlert("Save Error", `Could not save the project: ${error.message}`);
+                controls.saveProjectButton.textContent = "Save Current Project";
+            } finally {
+                controls.saveProjectButton.disabled = false;
+            }
+        }
+
+        function loadProject(projectName) {
+            const projectData = savedProjects.get(projectName);
+            if (!projectData) return;
+
+            for (const key in projectData) {
+                if (inputs[key]) {
+                    inputs[key].value = projectData[key];
+                }
+            }
+            // Ensure notes are loaded, even if they are empty
+            inputs.projectNotes.value = projectData.projectNotes || '';
+            
+            inputs.customerName.value = projectName;
+            checkNotes(); // Update star indicator
+            calculate();
+        }
+        
+        async function deleteProject() {
+            const projectName = controls.loadProjectDropdown.value;
+            if (!projectName) {
+                showAlert("Delete Error", "Please select a project from the dropdown to delete.");
+                return;
+            }
+            if (!currentProfileName) {
+                showAlert("Delete Error", "No user profile is set.");
+                return;
+            }
+            
+            const confirmed = await showConfirm(
+                "Delete Project", 
+                `Are you sure you want to delete "${projectName}"? This cannot be undone.`,
+                "Yes, Delete"
+            );
+            
+            if (!confirmed) {
+                return;
+            }
+
+            controls.deleteProjectButton.disabled = true;
+            controls.deleteProjectButton.textContent = "Deleting...";
+
+            try {
+                // Use the correct public path
+                const docRef = doc(db, `artifacts/${appId}/public/data/hydroseed-projects/${currentProfileName}/projects`, projectName);
+                await deleteDoc(docRef);
+                showAlert("Success", `Project "${projectName}" has been deleted.`);
+                resetForm(); // Clear the form after deletion
+            } catch (error) {
+                console.error("Error deleting project:", error);
+                showAlert("Delete Error", `Could not delete project: ${error.message}`);
+            } finally {
+                controls.deleteProjectButton.disabled = false;
+                controls.deleteProjectButton.textContent = "Delete Selected Project";
+            }
+        }
+        
+        // --- NEW: NOTES INDICATOR ---
+        function checkNotes() {
+            if (inputs.projectNotes.value.trim().length > 0) {
+                controls.notesIndicator.classList.remove('hidden');
+            } else {
+                controls.notesIndicator.classList.add('hidden');
+            }
+        }
+
+        // --- APP INITIALIZATION ---
+        function initializeAppLogic() {
+            // 1. Map all DOM elements
+            inputs = {
+                customerName: document.getElementById('customerName'),
                 area: document.getElementById('area'),
                 mulchRate: document.getElementById('mulchRate'),
                 seedRate: document.getElementById('seedRate'),
@@ -248,15 +800,15 @@
                 aquaGelRate: document.getElementById('aquaGelRate'),
                 jumpStartRate: document.getElementById('jumpStartRate'),
                 bsmRate: document.getElementById('bsmRate'),
+                projectNotes: document.getElementById('projectNotes'), // Add notes
                 balesPerLoad: document.getElementById('balesPerLoad'),
                 balesPerLoadSlider: document.getElementById('balesPerLoadSlider'),
-                // Bag weights
                 seedBagWeight: document.getElementById('seedBagWeight'),
                 fertilizerBagWeight: document.getElementById('fertilizerBagWeight'),
-                aquaGelBagWeight: document.getElementById('aquaGelBagWeight') // Still finds it by ID
+                aquaGelBagWeight: document.getElementById('aquaGelBagWeight') 
             };
 
-            const outputs = {
+            outputs = {
                 mulchNeeded: document.getElementById('mulchNeeded'),
                 mulchBales: document.getElementById('mulchBales'),
                 seedNeeded: document.getElementById('seedNeeded'),
@@ -273,92 +825,19 @@
                 mulchStacks: document.getElementById('mulchStacks'),
                 areaAcres: document.getElementById('areaAcres'),
             };
-            
-            // --- CONSTANTS ---
-            // Bag weights are now read from inputs
-            const CONSTANTS = {
-                KG_PER_MULCH_BALE: 22.7, // This is still constant as requested
-                BALES_PER_MULCH_STACK: 40,
-                HA_TO_ACRES: 2.47105,
-                HA_TO_M2: 10000,
-            };
 
-            // --- CALCULATION LOGIC ---
-            function calculate() {
-                // Read input values, default to 0 if empty
-                const area = parseFloat(inputs.area.value) || 0;
-                const mulchRate = parseFloat(inputs.mulchRate.value) || 0;
-                const seedRate = parseFloat(inputs.seedRate.value) || 0;
-                const fertilizerRate = parseFloat(inputs.fertilizerRate.value) || 0;
-                const aquaGelRate = parseFloat(inputs.aquaGelRate.value) || 0;
-                const balesPerLoad = parseInt(inputs.balesPerLoad.value) || 0;
-                
-                // Read bag weights, fallback to 1 to prevent division by zero
-                const seedBagWeight = parseFloat(inputs.seedBagWeight.value) || 1;
-                const fertilizerBagWeight = parseFloat(inputs.fertilizerBagWeight.value) || 1;
-                const aquaGelBagWeight = parseFloat(inputs.aquaGelBagWeight.value) || 1;
-
-                // --- Section 1: Totals ---
-                const totalKg = {
-                    mulch: area * mulchRate,
-                    seed: area * seedRate,
-                    fertilizer: area * fertilizerRate,
-                    aquaGel: area * aquaGelRate,
-                };
-                
-                const totalBalesBags = {
-                    mulch: totalKg.mulch / CONSTANTS.KG_PER_MULCH_BALE,
-                    seed: totalKg.seed / seedBagWeight,
-                    fertilizer: totalKg.fertilizer / fertilizerBagWeight,
-                    aquaGel: totalKg.aquaGel / aquaGelBagWeight,
-                };
-                
-                // --- Section 2: Truck Load ---
-                const totalLoads = balesPerLoad > 0 ? totalBalesBags.mulch / balesPerLoad : 0;
-                const areaM2 = area * CONSTANTS.HA_TO_M2;
-                const areaPerLoad = totalLoads > 0 ? areaM2 / totalLoads : 0;
-                
-                const perLoad = {
-                    seed: totalLoads > 0 ? totalKg.seed / totalLoads : 0,
-                    fertilizer: totalLoads > 0 ? totalKg.fertilizer / totalLoads : 0,
-                    aquaGel: totalLoads > 0 ? totalKg.aquaGel / totalLoads : 0,
-                };
-                
-                // --- Section 3: Other Calcs ---
-                const mulchStacks = totalBalesBags.mulch / CONSTANTS.BALES_PER_MULCH_STACK;
-                const areaAcres = area * CONSTANTS.HA_TO_ACRES;
-
-                // --- UPDATE UI ---
-                // Format numbers for display
-                const formatKg = (val) => `${val.toFixed(1)} kg`;
-                const formatNum = (val, dec = 2) => val.toFixed(dec);
-
-                outputs.mulchNeeded.textContent = formatKg(totalKg.mulch);
-                outputs.mulchBales.textContent = formatNum(totalBalesBags.mulch, 2);
-                outputs.seedNeeded.textContent = formatKg(totalKg.seed);
-                outputs.seedBags.textContent = formatNum(totalBalesBags.seed, 2);
-                outputs.fertilizerNeeded.textContent = formatKg(totalKg.fertilizer);
-                outputs.fertilizerBags.textContent = formatNum(totalBalesBags.fertilizer, 2);
-                outputs.aquaGelNeeded.textContent = formatKg(totalKg.aquaGel);
-                outputs.aquaGelBags.textContent = formatNum(totalBalesBags.aquaGel, 2);
-                
-                outputs.totalLoads.textContent = formatNum(totalLoads);
-                outputs.areaPerLoad.textContent = `${areaPerLoad.toFixed(0)} m²`;
-
-                outputs.seedPerLoad.textContent = formatKg(perLoad.seed);
-                outputs.fertilizerPerLoad.textContent = formatKg(perLoad.fertilizer);
-                outputs.aquaGelPerLoad.textContent = formatKg(perLoad.aquaGel);
-                
-                outputs.mulchStacks.textContent = formatNum(mulchStacks);
-                outputs.areaAcres.textContent = formatNum(areaAcres, 3);
-            }
-
-            // --- EVENT LISTENERS ---
+            // 2. Attach basic calculation listeners
             Object.values(inputs).forEach(input => {
-                input.addEventListener('input', calculate);
+                // Notes field doesn't trigger recalculation
+                if (input.id !== 'projectNotes') {
+                    input.addEventListener('input', calculate);
+                }
             });
             
-            // Sync slider and number input for bales per load
+            // Listener for notes star
+            inputs.projectNotes.addEventListener('input', checkNotes);
+            
+            // Sync slider and number input
             inputs.balesPerLoadSlider.addEventListener('input', (e) => {
                 inputs.balesPerLoad.value = e.target.value;
                 calculate();
@@ -368,11 +847,119 @@
                 calculate();
             });
 
-            // --- INITIAL CALCULATION ---
+            // 3. Attach new control listeners
+            controls.setUserButton.addEventListener('click', setProfile);
+            controls.saveProjectButton.addEventListener('click', saveProject);
+            controls.deleteProjectButton.addEventListener('click', deleteProject);
+            controls.resetButton.addEventListener('click', resetForm);
+            
+            // 4. Setup modal listeners
+            setupModalListeners();
+
+            // 5. Run initial calculation & notes check
             calculate();
+            checkNotes();
+        }
+
+        function setupFirestoreListeners() {
+            if (!db || !currentUserId || !currentProfileName) return;
+
+            // Use the correct public path
+            const projectsCollection = collection(db, `artifacts/${appId}/public/data/hydroseed-projects/${currentProfileName}/projects`);
+            
+            unsubscribeFromProjects = onSnapshot(projectsCollection, (snapshot) => {
+                savedProjects.clear();
+                controls.loadProjectDropdown.innerHTML = '<option value="">Select a project to load...</option>';
+                
+                snapshot.forEach((doc) => {
+                    savedProjects.set(doc.id, doc.data());
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = doc.id;
+                    controls.loadProjectDropdown.appendChild(option);
+                });
+
+                if(snapshot.empty) {
+                     controls.loadProjectDropdown.innerHTML = '<option value="">No projects saved</option>';
+                }
+            }, (error) => {
+                console.error("Error listening to projects: ", error);
+                showAlert("Database Error", `Could not load projects: ${error.message}`);
+                controls.loadProjectDropdown.innerHTML = '<option value="">Error loading</option>';
+            });
+
+            // Add listener for the dropdown
+            controls.loadProjectDropdown.addEventListener('input', (e) => {
+                if (e.target.value) {
+                    loadProject(e.target.value);
+                }
+            });
+        }
+
+        // --- MAIN ENTRY POINT ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize app logic (DOM mapping, basic listeners) immediately
+            // This ensures the page is interactive even before Firebase loads
+            initializeAppLogic();
+            
+            // Check for Firebase config
+            if (!firebaseConfig) {
+                console.error("Firebase config is missing.");
+                showAlert("Configuration Error", "The app is not configured correctly. Save/Load features are disabled.");
+                // Disable all Firebase-related controls
+                controls.setUserButton.disabled = true;
+                controls.employeeNameInput.placeholder = "Save/Load disabled";
+                controls.employeeNameInput.disabled = true;
+                return;
+            }
+
+            try {
+                // Initialize Firebase
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setLogLevel('error'); // Only log errors
+
+                // Listen for auth state changes
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        // User is signed in
+                        currentUserId = user.uid;
+                        console.log("User signed in with UID:", currentUserId);
+                        // Now that user is auth'd, enable the "Set User" button
+                        controls.setUserButton.disabled = false;
+
+                    } else {
+                        // User is signed out, attempt to sign in
+                        console.log("No user, attempting sign-in...");
+                        controls.setUserButton.disabled = true;
+                        
+                        try {
+                            if (initialAuthToken) {
+                                // Use the provided token from the environment
+                                await signInWithCustomToken(auth, initialAuthToken);
+                            } else {
+                                // Fallback for local development/testing
+                                await signInAnonymously(auth);
+
+                            }
+                        } catch (error) {
+                            console.error("Sign-in error:", error);
+                            showAlert("Authentication Error", "Could not connect to the database. Save/Load is disabled.");
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                showAlert("App Error", `Failed to load essential services: ${error.message}. Save/Load is disabled.`);
+                controls.setUserButton.disabled = true;
+                controls.employeeNameInput.placeholder = "Save/Load disabled";
+                controls.employeeNameInput.disabled = true;
+            }
         });
+
     </script>
 </body>
 </html>
-
 
