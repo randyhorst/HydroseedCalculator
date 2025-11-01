@@ -22,6 +22,10 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+        /* Style for date input in dark mode */
+        input[type=date] {
+            color-scheme: dark;
+        }
         .output-field {
             background-color: #374151; /* gray-700 */
             border: 1px solid #4b5563; /* gray-600 */
@@ -51,146 +55,115 @@
         }
 
 
-        /* --- Print Styles --- */
+        /* --- 
+        NEW: ADVANCED PRINT STYLES (Invoice Format - Tighter)
+        --- */
         @media print {
+            @page {
+                size: letter;
+                margin: 0.5in; /* Tighter page margins */
+            }
             body {
                 background-color: #ffffff;
                 color: #000000;
                 font-family: Arial, sans-serif;
-                font-size: 10pt; /* Compact base font */
+                font-size: 9pt; /* Tighter base font */
             }
-            main {
-                max-width: none;
-                padding: 0;
-                margin: 0;
+            
+            /* Hide the entire app container */
+            #app-container {
+                display: none !important;
             }
-            .no-print {
-                display: none;
-            }
-            .print-card {
-                background-color: #ffffff;
-                border: 1px solid #cccccc;
-                box-shadow: none;
-                padding: 0.5rem; /* Compact padding */
-                margin-bottom: 0.5rem; /* Compact margin */
-                page-break-inside: avoid;
-            }
-            .output-field {
-                background-color: #eeeeee;
-                color: #000000;
-                border: 1px solid #dddddd;
-                padding: 0.25rem 0.5rem; /* Compact output */
-                font-size: 10pt;
-            }
-            h1 {
-                font-size: 18pt !important;
-                margin-bottom: 0.5rem;
-            }
-            h2 {
-                font-size: 14pt !important;
-                margin-bottom: 0.5rem;
-            }
-            h3 {
-                font-size: 12pt !important;
-                margin-bottom: 0.25rem;
-            }
-            /* Style inputs for printing */
-            input[type=number], input[type=text], textarea {
-                background-color: #f3f4f6; /* light gray */
-                border: 1px solid #cccccc !important;
-                color: #000000;
-                padding: 0.25rem; /* Compact inputs */
-                font-size: 10pt;
-            }
-            label, .text-gray-400, .text-gray-300 {
-                font-size: 9pt;
-                color: #000 !important;
-            }
-            /* Ensure gradient text is black when printed */
-            .gradient-text {
-                -webkit-text-fill-color: #000000;
-                color: #000000;
-                background-image: none;
-            }
-            /* Show notes in print */
-            details {
-                padding-top: 0.5rem;
-                margin-top: 0.5rem;
-            }
-            details summary {
-                font-size: 11pt;
-                display: none; /* Hide summary in print */
-            }
-            details[open] .print-notes {
+            
+            /* Show the hidden invoice */
+            #print-invoice {
                 display: block !important;
-                border: none;
-                padding: 0;
-                margin: 0;
-            }
-            textarea {
-                min-height: 80px; /* Shorter notes */
             }
             
-            /* --- Compact Spacing --- */
-            .grid {
-                gap: 0.25rem !important;
+            /* Invoice Styles */
+            #print-invoice h1 {
+                font-size: 18pt; /* Tighter */
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 0.2in; /* Tighter */
             }
-            .space-y-4, .space-y-3 {
-                gap: 0.5rem;
+            #print-invoice h2 {
+                font-size: 12pt; /* Tighter */
+                font-weight: bold;
+                border-bottom: 1px solid #000; /* Tighter */
+                padding-bottom: 2px; /* Tighter */
+                margin-top: 0.2in; /* Tighter */
+                margin-bottom: 0.1in; /* Tighter */
             }
-            .space-y-2 {
-                gap: 0.25rem;
+            #print-invoice-header {
+                font-size: 10pt; /* Tighter */
+                margin-bottom: 0.2in; /* Tighter */
             }
-            .p-5 { padding: 0.5rem !important; }
-            .p-3 { padding: 0.25rem !important; }
-            .p-2 { padding: 0.25rem !important; }
-            .mb-4 { margin-bottom: 0.5rem !important; }
-            .mb-3 { margin-bottom: 0.25rem !important; }
-            .mb-2 { margin-bottom: 0.25rem !important; }
-            .mt-4 { margin-top: 0.5rem !important; }
-            .mt-6 { margin-top: 0.75rem !important; }
-
-            .text-xl { font-size: 12pt !important; }
-            .text-2xl { font-size: 14pt !important; }
-            .text-sm { font-size: 9pt !important; }
-            .text-xs { font-size: 8pt !important; }
-            .font-semibold { font-weight: 600; }
-            .font-bold { font-weight: 700; }
             
-            /* Specific tweaks */
-            .grid-cols-3.gap-4.items-center {
-                gap: 0.5rem !important;
+            /* Table Styles */
+            #print-invoice table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 0.05in; /* Tighter */
             }
-            .grid-cols-5.items-center.gap-3 {
-                gap: 0.5rem !important;
+            #print-invoice th, #print-invoice td {
+                border: 1px solid #999;
+                padding: 4px 6px; /* Tighter */
+                text-align: left;
+                font-size: 9pt; /* Tighter */
             }
-            .grid-cols-3.items-center.gap-3 {
-                gap: 0.5rem !important;
+            #print-invoice th {
+                background-color: #f0f0f0;
+                font-weight: bold;
+            }
+            #print-invoice td.text-right, #print-invoice th.text-right {
+                text-align: right;
+            }
+            
+            /* Notes Section */
+            #print-notes-content {
+                white-space: pre-wrap; /* Respect newlines in notes */
+                font-size: 9pt; /* Tighter */
+                border: 1px solid #eee;
+                padding: 4px 6px; /* Tighter */
+                background: #fdfdfd;
+                min-height: 40px; /* Tighter */
+            }
+            
+            /* Other Calcs Section */
+            #print-other-calcs {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5in; /* Tighter */
+                font-size: 9pt; /* Tighter */
             }
         }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 antialiased pt-8 pb-24">
 
-    <div class="max-w-2xl mx-auto px-4">
-        <!-- Header (no-print hides it when printing) -->
+    <!-- THIS IS THE APP CONTAINER, HIDDEN ON PRINT -->
+    <div id="app-container" class="max-w-2xl mx-auto px-4">
+        <!-- Header -->
         <header class="text-center mb-6 no-print">
-            <!-- Modified title with gradient and shadow -->
             <h1 class="text-4xl font-extrabold gradient-text tracking-tight drop-shadow-lg">Hydroseeding Calculator</h1>
         </header>
 
-        <!-- Project Controls REMOVED -->
-
         <main class="space-y-4"> 
             <!-- 1. Project Specs -->
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
-                <!-- Section header color changed -->
+            <div id="card-specs" class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
                 <h2 class="text-xl font-semibold mb-4 text-emerald-400">1. Project Specs</h2>
                 
-                <!-- COMPACT: Customer Name -->
-                <div class="grid grid-cols-3 items-center gap-3 mb-2"> 
-                    <label for="customerName" class="col-span-1 font-medium text-gray-300 text-sm">Customer</label> 
-                    <input type="text" id="customerName" placeholder="Enter name" class="col-span-2 w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                <!-- Customer and Date -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mb-2 no-print">
+                    <div class="grid grid-cols-3 items-center gap-3">
+                         <label for="customerName" class="col-span-1 font-medium text-gray-300 text-sm">Customer</label> 
+                         <input type="text" id="customerName" placeholder="Enter name" class="col-span-2 w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                    </div>
+                    <div class="grid grid-cols-3 items-center gap-3">
+                         <label for="projectDate" class="col-span-1 font-medium text-gray-300 text-sm">Date</label> 
+                         <input type="date" id="projectDate" class="col-span-2 w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                    </div>
                 </div>
 
                 <!-- Area Input - Reverted size -->
@@ -279,12 +252,11 @@
                     </div>
                 </details>
                 
-                <!-- NEW: Project Notes -->
+                <!-- Project Notes -->
                 <details class="group pt-4 mt-4 border-t border-gray-700">
                     <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium list-none">
                         <span class="flex items-center">
                             Project Notes
-                            <!-- NEW: Star indicator -->
                             <span id="notesIndicator" class="text-emerald-400 ml-2 hidden font-bold text-lg">*</span>
                         </span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180 no-print" viewBox="0 0 20 20" fill="currentColor">
@@ -297,12 +269,10 @@
                 </details>
             </div>
             
-            <!-- 2. Truck Load Mix (MOVED UP) -->
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
-                <!-- Section header color changed -->
+            <!-- 2. Truck Load Mix (SWAPPED) -->
+            <div id="card-loadmix" class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
                 <h2 class="text-xl font-semibold mb-4 text-emerald-400">2. Truck Load Mix</h2>
                 
-                <!-- COMPACTED: Bales per Load -->
                 <div class="grid grid-cols-3 items-center gap-3 mb-4">
                     <label for="balesPerLoad" class="col-span-1 font-medium text-gray-300">Bales / Load</label>
                     <div class="col-span-2 flex items-center space-x-3">
@@ -311,7 +281,6 @@
                     </div>
                 </div>
 
-                <!-- COMPACTED: Total Loads / Area per Load -->
                 <div class="grid grid-cols-2 gap-4 mt-4"> 
                     <div class="text-center">
                         <div class="text-sm text-gray-400">Total Loads</div>
@@ -327,25 +296,21 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
                         <span class="font-medium">Seed</span>
-                        <!-- Product mix color changed -->
                         <span id="seedPerLoad" class="font-bold text-emerald-400">0 kg</span>
                     </div>
                     <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
                         <span class="font-medium">Fertilizer</span>
-                        <!-- Product mix color changed -->
                         <span id="fertilizerPerLoad" class="font-bold text-emerald-400">0 kg</span>
                     </div>
-                    <div class="flex justify-between items-center bg-gray-700/5If p-3 rounded-lg">
+                    <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
                         <span class="font-medium">AquaGel</span>
-                        <!-- Product mix color changed -->
                         <span id="aquaGelPerLoad" class="font-bold text-emerald-400">0 kg</span>
                     </div>
                 </div>
             </div>
-
-            <!-- 3. Calculated Totals (MOVED DOWN) -->
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
-                 <!-- Section header color changed -->
+            
+            <!-- 3. Calculated Totals (SWAPPED) -->
+            <div id="card-totals" class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
                  <h2 class="text-xl font-semibold mb-4 text-emerald-400">3. Calculated Totals</h2>
                  <div class="grid grid-cols-3 gap-x-4 gap-y-2 text-center text-sm font-medium text-gray-400 mb-3">
                      <span>Product</span>
@@ -377,8 +342,7 @@
             </div>
 
             <!-- 4. Other Calculations -->
-            <div class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
-                 <!-- Section header color changed -->
+            <div id="card-other" class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
                  <h2 class="text-xl font-semibold mb-4 text-emerald-400">4. Other Calculations</h2>
                  <div class="grid grid-cols-2 gap-4 text-center">
                     <div>
@@ -396,7 +360,6 @@
             
              <!-- Reference Table (no-print hides it) -->
              <div class="bg-gray-800 p-5 rounded-xl shadow-lg no-print">
-                 <!-- Section header color changed -->
                  <h2 class="text-xl font-semibold mb-4 text-emerald-400">Reference</h2>
                  <div class="text-center">
                      <p class="font-medium mb-2 text-gray-300">Hydroseeder Bale Capacity</p>
@@ -434,17 +397,154 @@
 
         </main>
     </div>
+    
+    <!-- 
+    NEW: HIDDEN INVOICE FOR PRINTING 
+    This is hidden on screen and shown only for print.
+    -->
+    <div id="print-invoice" class="hidden">
+        <h1>Hydroseeding Calculator</h1>
+        
+        <div id="print-invoice-header">
+            <div class="grid grid-cols-2 gap-4">
+                <div><strong>Customer:</strong> <span id="print-customer"></span></div>
+                <div><strong>Date:</strong> <span id="print-date"></span></div>
+            </div>
+            <div><strong>Total Area:</strong> <span id="print-area"></span> ha</div>
+        </div>
+        
+        <!-- Totals -->
+        <section>
+            <h2>Material Totals</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th class="text-right">Rate (kg/ha)</th>
+                        <th class="text-right">Total Bales/Bags</th>
+                        <th class="text-right">Total Needed (kg)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Mulch</strong></td>
+                        <td id="print-mulch-rate" class="text-right"></td>
+                        <td id="print-mulch-bales" class="text-right"></td>
+                        <td id="print-mulch-needed" class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Seed</strong></td>
+                        <td id="print-seed-rate" class="text-right"></td>
+                        <td id="print-seed-bags" class="text-right"></td>
+                        <td id="print-seed-needed" class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fertilizer</strong></td>
+                        <td id="print-fert-rate" class="text-right"></td>
+                        <td id="print-fert-bags" class="text-right"></td>
+                        <td id="print-fert-needed" class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>AquaGel</strong></td>
+                        <td id="print-aqua-rate" class="text-right"></td>
+                        <td id="print-aqua-bags" class="text-right"></td>
+                        <td id="print-aqua-needed" class="text-right"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Load Mix -->
+        <section>
+            <h2>Truck Load Mix</h2>
+            <div id="print-load-summary" class="grid grid-cols-3 gap-4">
+                <div><strong>Bales per Load:</strong> <span id="print-bales-load"></span></div>
+                <div><strong>Total Loads:</strong> <span id="print-total-loads"></span></div>
+                <div><strong>Area per Load:</strong> <span id="print-area-load"></span></div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th class="text-right">Amount per Load</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Seed</strong></td>
+                        <td id="print-seed-load" class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fertilizer</strong></td>
+                        <td id="print-fert-load" class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>AquaGel</strong></td>
+                        <td id="print-aqua-load" class="text-right"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <!-- Other Calcs -->
+        <section>
+            <h2>Other Calculations</h2>
+            <div id="print-other-calcs">
+                <div><strong>Mulch Stacks:</strong> <span id="print-mulch-stacks"></span></div>
+                <div><strong>Area in Acres:</strong> <span id="print-area-acres"></span></div>
+            </div>
+        </section>
+
+        <!-- Notes -->
+        <section>
+            <h2>Project Notes</h2>
+            <p id="print-notes-content"></p>
+        </section>
+    </div>
 
     <!-- Firebase SDKs REMOVED -->
     
     <script>
         // --- GLOBAL CONFIG & STATE ---
-        // All Firebase logic removed
         let inputs = {};
         let outputs = {};
+        // Add all print elements to controls
         const controls = {
             resetButton: document.getElementById('resetButton'),
-            notesIndicator: document.getElementById('notesIndicator') // Star indicator
+            notesIndicator: document.getElementById('notesIndicator'),
+            
+            // Print-only fields
+            printCustomer: document.getElementById('print-customer'),
+            printDate: document.getElementById('print-date'),
+            printArea: document.getElementById('print-area'),
+            
+            printMulchRate: document.getElementById('print-mulch-rate'),
+            printMulchNeeded: document.getElementById('print-mulch-needed'),
+            printMulchBales: document.getElementById('print-mulch-bales'),
+            
+            printSeedRate: document.getElementById('print-seed-rate'),
+            printSeedNeeded: document.getElementById('print-seed-needed'),
+            printSeedBags: document.getElementById('print-seed-bags'),
+            
+            printFertRate: document.getElementById('print-fert-rate'),
+            printFertNeeded: document.getElementById('print-fert-needed'),
+            printFertBags: document.getElementById('print-fert-bags'),
+            
+            printAquaRate: document.getElementById('print-aqua-rate'),
+            printAquaNeeded: document.getElementById('print-aqua-needed'),
+            printAquaBags: document.getElementById('print-aqua-bags'),
+            
+            printBalesLoad: document.getElementById('print-bales-load'),
+            printTotalLoads: document.getElementById('print-total-loads'),
+            printAreaLoad: document.getElementById('print-area-load'),
+            
+            printSeedLoad: document.getElementById('print-seed-load'),
+            printFertLoad: document.getElementById('print-fert-load'),
+            printAquaLoad: document.getElementById('print-aqua-load'),
+            
+            printMulchStacks: document.getElementById('print-mulch-stacks'),
+            printAreaAcres: document.getElementById('print-area-acres'),
+            printNotesContent: document.getElementById('print-notes-content')
         };
         
         // Constants
@@ -457,7 +557,7 @@
 
         // --- CALCULATION LOGIC ---
         function calculate() {
-            // This function is self-contained and safe, no changes needed
+            // --- 1. Read Inputs ---
             const area = parseFloat(inputs.area.value) || 0;
             const mulchRate = parseFloat(inputs.mulchRate.value) || 0;
             const seedRate = parseFloat(inputs.seedRate.value) || 0;
@@ -467,6 +567,8 @@
             const seedBagWeight = parseFloat(inputs.seedBagWeight.value) || 1;
             const fertilizerBagWeight = parseFloat(inputs.fertilizerBagWeight.value) || 1;
             const aquaGelBagWeight = parseFloat(inputs.aquaGelBagWeight.value) || 1;
+            
+            // --- 2. Perform Calculations ---
             const totalKg = {
                 mulch: area * mulchRate,
                 seed: area * seedRate,
@@ -489,6 +591,8 @@
             };
             const mulchStacks = totalBalesBags.mulch / CONSTANTS.BALES_PER_MULCH_STACK;
             const areaAcres = area * CONSTANTS.HA_TO_ACRES;
+            
+            // --- 3. Update App UI ---
             const formatKg = (val) => `${val.toFixed(1)} kg`;
             const formatNum = (val, dec = 2) => val.toFixed(dec);
             outputs.mulchNeeded.textContent = formatKg(totalKg.mulch);
@@ -506,11 +610,45 @@
             outputs.aquaGelPerLoad.textContent = formatKg(perLoad.aquaGel);
             outputs.mulchStacks.textContent = formatNum(mulchStacks);
             outputs.areaAcres.textContent = formatNum(areaAcres, 3);
+            
+            // --- 4. Update Print Invoice UI ---
+            controls.printCustomer.textContent = inputs.customerName.value || 'N/A';
+            controls.printDate.textContent = inputs.projectDate.value || 'N/A';
+            controls.printArea.textContent = formatNum(area, 3);
+            
+            controls.printMulchRate.textContent = formatNum(mulchRate, 1);
+            controls.printMulchNeeded.textContent = formatNum(totalKg.mulch, 1);
+            controls.printMulchBales.textContent = formatNum(totalBalesBags.mulch, 2);
+            
+            controls.printSeedRate.textContent = formatNum(seedRate, 1);
+            controls.printSeedNeeded.textContent = formatNum(totalKg.seed, 1);
+            controls.printSeedBags.textContent = formatNum(totalBalesBags.seed, 2);
+            
+            controls.printFertRate.textContent = formatNum(fertilizerRate, 1);
+            controls.printFertNeeded.textContent = formatNum(totalKg.fertilizer, 1);
+            controls.printFertBags.textContent = formatNum(totalBalesBags.fertilizer, 2);
+            
+            controls.printAquaRate.textContent = formatNum(aquaGelRate, 1);
+            controls.printAquaNeeded.textContent = formatNum(totalKg.aquaGel, 1);
+            controls.printAquaBags.textContent = formatNum(totalBalesBags.aquaGel, 2);
+
+            controls.printBalesLoad.textContent = formatNum(balesPerLoad, 0);
+            controls.printTotalLoads.textContent = formatNum(totalLoads, 2);
+            controls.printAreaLoad.textContent = `${formatNum(areaPerLoad, 0)} m²`;
+            
+            controls.printSeedLoad.textContent = formatKg(perLoad.seed);
+            controls.printFertLoad.textContent = formatKg(perLoad.fertilizer);
+            controls.printAquaLoad.textContent = formatKg(perLoad.aquaGel);
+            
+            controls.printMulchStacks.textContent = formatNum(mulchStacks, 2);
+            controls.printAreaAcres.textContent = formatNum(areaAcres, 3);
+            controls.printNotesContent.textContent = inputs.projectNotes.value || 'No notes.';
         }
 
         // --- RESET FUNCTION ---
         function resetForm() {
             inputs.customerName.value = '';
+            inputs.projectDate.value = new Date().toISOString().split('T')[0]; // Reset date
             inputs.area.value = 0;
             inputs.mulchRate.value = 0;
             inputs.seedRate.value = 0;
@@ -539,9 +677,10 @@
 
         // --- APP INITIALIZATION ---
         function initializeAppLogic() {
-            // 1. Map all DOM elements
+            // 1. Map all App DOM elements
             inputs = {
                 customerName: document.getElementById('customerName'),
+                projectDate: document.getElementById('projectDate'), // Added date
                 area: document.getElementById('area'),
                 mulchRate: document.getElementById('mulchRate'),
                 seedRate: document.getElementById('seedRate'),
@@ -599,7 +738,10 @@
             // 3. Attach new control listeners
             controls.resetButton.addEventListener('click', resetForm);
             
-            // 4. Run initial calculation & notes check
+            // 4. Set today's date
+            inputs.projectDate.value = new Date().toISOString().split('T')[0];
+            
+            // 5. Run initial calculation & notes check
             calculate();
             checkNotes();
         }
