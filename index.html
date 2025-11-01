@@ -63,13 +63,13 @@
                 size: letter;
                 margin: 0.5in; /* Tighter page margins */
             }
-            body {
+            html, body { /* Added html selector */
                 background-color: #ffffff !important; /* FORCE white background */
                 color: #000000 !important; /* FORCE black text */
                 font-family: Arial, sans-serif;
                 font-size: 9pt; /* Tighter base font */
-                -webkit-print-color-adjust: exact; /* Helps mobile browsers */
-                color-scheme: light; /* Ensure light mode */
+                -webkit-print-color-adjust: exact !important; /* Helps mobile browsers */
+                color-scheme: light !important; /* Ensure light mode */
             }
             
             /* Hide the entire app container */
@@ -159,15 +159,15 @@
             <div id="card-specs" class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
                 <h2 class="text-xl font-semibold mb-4 text-emerald-400">1. Project Specs</h2>
                 
-                <!-- Customer and Date -->
+                <!-- Customer and Date (SWAPPED) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mb-2 no-print">
                     <div class="grid grid-cols-3 items-center gap-3">
-                         <label for="customerName" class="col-span-1 font-medium text-gray-300 text-sm">Customer</label> 
-                         <input type="text" id="customerName" placeholder="Enter name" class="col-span-2 w-full h-9 px-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                         <label for="projectDate" class="col-span-1 font-medium text-gray-300 text-sm">Date</label> 
+                         <input type="date" id="projectDate" class="col-span-2 w-full px-2 py-1 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
                     </div>
                     <div class="grid grid-cols-3 items-center gap-3">
-                         <label for="projectDate" class="col-span-1 font-medium text-gray-300 text-sm">Date</label> 
-                         <input type="date" id="projectDate" class="col-span-2 w-full h-9 px-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                         <label for="customerName" class="col-span-1 font-medium text-gray-300 text-sm">Customer</label> 
+                         <input type="text" id="customerName" placeholder="Enter name" class="col-span-2 w-full px-2 py-1 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
                     </div>
                 </div>
 
@@ -412,8 +412,8 @@
         
         <div id="print-invoice-header">
             <div class="grid grid-cols-2 gap-4">
-                <div><strong>Customer:</strong> <span id="print-customer"></span></div>
                 <div><strong>Date:</strong> <span id="print-date"></span></div>
+                <div><strong>Customer:</strong> <span id="print-customer"></span></div>
             </div>
             <div><strong>Total Area:</strong> <span id="print-area"></span> ha</div>
         </div>
