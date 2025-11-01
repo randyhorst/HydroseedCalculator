@@ -64,10 +64,12 @@
                 margin: 0.5in; /* Tighter page margins */
             }
             body {
-                background-color: #ffffff;
-                color: #000000;
+                background-color: #ffffff !important; /* FORCE white background */
+                color: #000000 !important; /* FORCE black text */
                 font-family: Arial, sans-serif;
                 font-size: 9pt; /* Tighter base font */
+                -webkit-print-color-adjust: exact; /* Helps mobile browsers */
+                color-scheme: light; /* Ensure light mode */
             }
             
             /* Hide the entire app container */
@@ -78,6 +80,7 @@
             /* Show the hidden invoice */
             #print-invoice {
                 display: block !important;
+                color: #000000 !important; /* Ensure invoice text is black */
             }
             
             /* Invoice Styles */
@@ -86,6 +89,7 @@
                 font-weight: bold;
                 text-align: center;
                 margin-bottom: 0.2in; /* Tighter */
+                color: #000000 !important;
             }
             #print-invoice h2 {
                 font-size: 12pt; /* Tighter */
@@ -94,6 +98,7 @@
                 padding-bottom: 2px; /* Tighter */
                 margin-top: 0.2in; /* Tighter */
                 margin-bottom: 0.1in; /* Tighter */
+                color: #000000 !important;
             }
             #print-invoice-header {
                 font-size: 10pt; /* Tighter */
@@ -113,7 +118,7 @@
                 font-size: 9pt; /* Tighter */
             }
             #print-invoice th {
-                background-color: #f0f0f0;
+                background-color: #f0f0f0 !important; /* Force light bg */
                 font-weight: bold;
             }
             #print-invoice td.text-right, #print-invoice th.text-right {
@@ -126,7 +131,7 @@
                 font-size: 9pt; /* Tighter */
                 border: 1px solid #eee;
                 padding: 4px 6px; /* Tighter */
-                background: #fdfdfd;
+                background: #fdfdfd !important; /* Force light bg */
                 min-height: 40px; /* Tighter */
             }
             
@@ -754,4 +759,3 @@
     </script>
 </body>
 </html>
-
