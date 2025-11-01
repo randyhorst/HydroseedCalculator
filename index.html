@@ -162,32 +162,32 @@
             <h1 class="text-4xl font-extrabold gradient-text tracking-tight drop-shadow-lg">Hydroseeding Calculator</h1>
         </header>
 
-        <main class="space-y-4"> 
+        <main class="space-y-3"> 
             <!-- 1. Project Specs -->
-            <div id="card-specs" class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
+            <div id="card-specs" class="bg-gray-800 p-4 rounded-xl shadow-lg print-card">
                 <h2 class="text-xl font-semibold mb-4 text-emerald-400">1. Project Specs</h2>
                 
                 <!-- Customer and Date (SWAPPED & STYLES UPDATED) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mb-2 no-print">
+                <div class="space-y-3 mb-3 no-print">
                     <div class="grid grid-cols-3 items-center gap-3">
                          <label for="projectDate" class="col-span-1 font-medium text-gray-300">Date</label> 
-                         <input type="date" id="projectDate" class="col-span-2 w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white text-base font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                         <input type="date" id="projectDate" class="col-span-2 w-full p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
                     </div>
                     <div class="grid grid-cols-3 items-center gap-3">
                          <label for="customerName" class="col-span-1 font-medium text-gray-300">Customer</label> 
-                         <input type="text" id="customerName" placeholder="Enter name" class="col-span-2 w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white text-base font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                         <input type="text" id="customerName" placeholder="Enter name" class="col-span-2 w-full p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
                     </div>
                 </div>
 
                 <!-- Area Input - Reverted size -->
-                <div class="grid grid-cols-3 items-center gap-3 mb-4"> 
+                <div class="grid grid-cols-3 items-center gap-3 mb-3"> 
                     <label for="area" class="col-span-1 font-medium text-gray-300">Total Area (ha)</label> 
-                    <input type="number" id="area" value="0" placeholder="0" class="col-span-2 w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white text-base font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                    <input type="number" id="area" value="0" placeholder="0" class="col-span-2 w-full p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
                 </div>
 
                 <!-- Application Rates -->
-                <h3 class="text-lg font-semibold mb-3 text-gray-200">Application Rates</h3>
-                <div class="space-y-4">
+                <h3 class="text-lg font-semibold mb-2 text-gray-200">Application Rates</h3>
+                <div class="space-y-3">
                     <div class="grid grid-cols-5 items-center gap-3">
                         <label for="mulchRate" class="col-span-2 font-medium">Mulch</label>
                         <input type="number" id="mulchRate" value="0" placeholder="0" class="col-span-2 p-2 rounded-md bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-1 focus:ring-emerald-500">
@@ -206,7 +206,7 @@
                 </div>
 
                 <!-- Collapsible Material Bag Weights -->
-                <details class="group pt-4 mt-4 border-t border-gray-700">
+                <details class="group pt-3 mt-3 border-t border-gray-700">
                     <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium list-none">
                         <span>Material Bag Weight Settings</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180 no-print" viewBox="0 0 20 20" fill="currentColor">
@@ -228,7 +228,7 @@
                 </details>
                 
                 <!-- Optional Inputs -->
-                <details class="group pt-4 mt-4 border-t border-gray-700">
+                <details class="group pt-3 mt-3 border-t border-gray-700">
                     <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium list-none">
                         <span>Show Optional Products</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-200 group-open:rotate-180 no-print" viewBox="0 0 20 20" fill="currentColor">
@@ -266,7 +266,7 @@
                 </details>
                 
                 <!-- Project Notes -->
-                <details class="group pt-4 mt-4 border-t border-gray-700">
+                <details class="group pt-3 mt-3 border-t border-gray-700">
                     <summary class="flex justify-between items-center cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium list-none">
                         <span class="flex items-center">
                             Project Notes
@@ -283,10 +283,10 @@
             </div>
             
             <!-- 2. Truck Load Mix (SWAPPED) -->
-            <div id="card-loadmix" class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
+            <div id="card-loadmix" class="bg-gray-800 p-4 rounded-xl shadow-lg print-card">
                 <h2 class="text-xl font-semibold mb-4 text-emerald-400">2. Truck Load Mix</h2>
                 
-                <div class="grid grid-cols-3 items-center gap-3 mb-4">
+                <div class="grid grid-cols-3 items-center gap-3 mb-3">
                     <label for="balesPerLoad" class="col-span-1 font-medium text-gray-300">Bales / Load</label>
                     <div class="col-span-2 flex items-center space-x-3">
                         <input type="range" id="balesPerLoadSlider" min="1" max="50" value="30" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer no-print">
@@ -294,7 +294,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mt-4"> 
+                <div class="grid grid-cols-2 gap-4 mt-3"> 
                     <div class="text-center">
                         <div class="text-sm text-gray-400">Total Loads</div>
                         <div id="totalLoads" class="text-xl font-bold text-white">0</div> 
@@ -305,7 +305,7 @@
                     </div>
                 </div>
 
-                <h3 class="text-lg font-semibold mt-6 mb-3 text-gray-200">Product Mix per Load</h3>
+                <h3 class="text-lg font-semibold mt-4 mb-2 text-gray-200">Product Mix per Load</h3>
                 <div class="space-y-2">
                     <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
                         <span class="font-medium">Seed</span>
@@ -323,14 +323,14 @@
             </div>
             
             <!-- 3. Calculated Totals (SWAPPED) -->
-            <div id="card-totals" class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
+            <div id="card-totals" class="bg-gray-800 p-4 rounded-xl shadow-lg print-card">
                  <h2 class="text-xl font-semibold mb-4 text-emerald-400">3. Calculated Totals</h2>
-                 <div class="grid grid-cols-3 gap-x-4 gap-y-2 text-center text-sm font-medium text-gray-400 mb-3">
+                 <div class="grid grid-cols-3 gap-x-4 gap-y-2 text-center text-sm font-medium text-gray-400 mb-2">
                      <span>Product</span>
                      <span>Total Needed</span>
                      <span>Bales/Bags</span>
                  </div>
-                 <div class="space-y-3">
+                 <div class="space-y-2">
                      <div class="grid grid-cols-3 gap-4 items-center">
                          <span class="font-semibold text-gray-200">Mulch</span>
                          <div id="mulchNeeded" class="output-field">0 kg</div>
@@ -355,9 +355,9 @@
             </div>
 
             <!-- 4. Other Calculations -->
-            <div id="card-other" class="bg-gray-800 p-5 rounded-xl shadow-lg print-card">
+            <div id="card-other" class="bg-gray-800 p-4 rounded-xl shadow-lg print-card">
                  <h2 class="text-xl font-semibold mb-4 text-emerald-400">4. Other Calculations</h2>
-                 <div class="grid grid-cols-2 gap-4 text-center">
+                 <div class="grid grid-cols-2 gap-3 text-center">
                     <div>
                         <div class="text-sm text-gray-400">Mulch Stacks</div>
                         <div id="mulchStacks" class="text-2xl font-bold text-white mt-1">0</div>
@@ -372,7 +372,7 @@
             </div>
             
              <!-- Reference Table (no-print hides it) -->
-             <div class="bg-gray-800 p-5 rounded-xl shadow-lg no-print">
+             <div class="bg-gray-800 p-4 rounded-xl shadow-lg no-print">
                  <h2 class="text-xl font-semibold mb-4 text-emerald-400">Reference</h2>
                  <div class="text-center">
                      <p class="font-medium mb-2 text-gray-300">Hydroseeder Bale Capacity</p>
@@ -390,7 +390,7 @@
             </div>
 
             <!-- Print Button (MOVED TO BOTTOM) -->
-            <div class="mt-8 flex justify-center gap-4 no-print"> 
+            <div class="mt-6 flex justify-center gap-4 no-print"> 
                 <!-- NEW: Reset Button -->
                 <button id="resetButton" class="inline-flex items-center justify-center px-6 py-3 bg-gray-600 hover:bg-gray-500 text-white font-semibold rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -767,5 +767,4 @@
     </script>
 </body>
 </html>
-
 
